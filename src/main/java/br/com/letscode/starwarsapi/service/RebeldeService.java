@@ -35,16 +35,11 @@ public class RebeldeService {
     }
 
     public void editarLocalizacao(String id){
-        List<Rebelde> listaRebeldes = listarRebeldes();
-        Rebelde rebeldeEditar;
-        for(int i=0; i <= listaRebeldes.size();i++){
-            if(listaRebeldes.get(i).getId().equals(id)){
-                rebeldeEditar = listaRebeldes.get(i);
-                final Localizacao localizacaoNova = new Localizacao("456", "789", "Lua");
-                rebeldeEditar.setLocalizacao(localizacaoNova);
-                return;
-            }
-        }
+
+        Rebelde rebeldeEditar = rebeldesRepository.getById(id);
+        final Localizacao localizacaoNova = new Localizacao("456", "789", "Lua");
+        rebeldeEditar.setLocalizacao(localizacaoNova);
+        rebeldesRepository.save(rebeldeEditar);
 
     }
 

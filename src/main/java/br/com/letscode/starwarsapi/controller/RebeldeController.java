@@ -16,6 +16,7 @@ public class RebeldeController {
     @Autowired
     private RebeldeService rebeldeService;
 
+    //avaliar se está funcionando correto o body - via parametro okay
     @PostMapping
     public ResponseEntity criarRebelde(CadastrarRebeldeDTO cadastrarRebeldeDTO) {
         rebeldeService.criarRebelde(cadastrarRebeldeDTO);
@@ -27,7 +28,7 @@ public class RebeldeController {
         return rebeldeService.listarRebeldes();
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity editarLocalizacao(@PathVariable("id") String id) {
         rebeldeService.editarLocalizacao(id);
         return ResponseEntity.ok().build();
