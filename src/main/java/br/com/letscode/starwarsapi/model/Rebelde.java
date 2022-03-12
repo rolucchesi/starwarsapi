@@ -1,11 +1,14 @@
 package br.com.letscode.starwarsapi.model;
 
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "REBELDES")
+@Setter
 public class Rebelde {
 
     @Id
