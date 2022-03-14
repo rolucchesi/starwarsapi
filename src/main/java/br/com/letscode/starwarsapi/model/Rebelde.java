@@ -1,14 +1,24 @@
 package br.com.letscode.starwarsapi.model;
 
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "REBELDES")
+@Getter
 @Setter
+@ToString
 public class Rebelde {
 
     @Id
@@ -55,38 +65,6 @@ public class Rebelde {
         this.inventario = inventario;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public Integer getIdade() {
-        return idade;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public Integer getContagemTraidor() {
-        return contagemTraidor;
-    }
-
-    public Boolean getTraidor() {
-        return traidor;
-    }
-
-    public Localizacao getLocalizacao() {
-        return localizacao;
-    }
-
-    public Inventario getInventario() {
-        return inventario;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -98,19 +76,5 @@ public class Rebelde {
     @Override
     public int hashCode() {
         return Objects.hash(id, nome, idade, genero, contagemTraidor, traidor, localizacao, inventario);
-    }
-
-    @Override
-    public String toString() {
-        return "Rebelde{" +
-                "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", idade=" + idade +
-                ", genero=" + genero +
-                ", contagemTraidor=" + contagemTraidor +
-                ", traidor=" + traidor +
-                ", localizacao=" + localizacao +
-                ", inventario=" + inventario +
-                '}';
     }
 }

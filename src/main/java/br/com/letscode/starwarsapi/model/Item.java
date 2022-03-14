@@ -1,11 +1,21 @@
 package br.com.letscode.starwarsapi.model;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "ITENS")
+@Getter
+@Setter
+@ToString
 public class Item {
 
     @Id
@@ -30,22 +40,6 @@ public class Item {
         this.pontos = getQuantidadePontos(this.nome);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public Integer getPontos() {
-        return pontos;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
     private String validaNomeItem(final String nome) {
         if (nome.equalsIgnoreCase("arma")) {
             return "Arma";
@@ -60,7 +54,7 @@ public class Item {
         }
     }
 
-    private Integer getQuantidadePontos(final String nome) {
+    public Integer getQuantidadePontos(final String nome) {
         switch (nome) {
             case "Arma":
                 return 4;
@@ -76,25 +70,15 @@ public class Item {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Item)) return false;
-        final Item item = (Item) o;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
         return Objects.equals(id, item.id) && Objects.equals(nome, item.nome) && Objects.equals(pontos, item.pontos) && Objects.equals(quantidade, item.quantidade);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, nome, pontos, quantidade);
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", pontos=" + pontos +
-                ", quantidade=" + quantidade +
-                '}';
     }
 }

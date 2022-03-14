@@ -1,5 +1,9 @@
 package br.com.letscode.starwarsapi.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +13,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "LOCALIZACAO")
+@Getter
+@Setter
+@ToString
 public class Localizacao {
 
     @Id
@@ -35,22 +42,6 @@ public class Localizacao {
         this.nome = nome;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -62,15 +53,5 @@ public class Localizacao {
     @Override
     public int hashCode() {
         return Objects.hash(id, latitude, longitude, nome);
-    }
-
-    @Override
-    public String toString() {
-        return "Localizacao{" +
-                "id='" + id + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", nome='" + nome + '\'' +
-                '}';
     }
 }

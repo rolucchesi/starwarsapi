@@ -1,12 +1,24 @@
 package br.com.letscode.starwarsapi.model;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "INVENTARIO")
+@Getter
+@Setter
+@ToString
 public class Inventario {
 
     @Id
@@ -23,14 +35,6 @@ public class Inventario {
         this.itens = itens;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public List<Item> getItens() {
-        return itens;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -42,13 +46,5 @@ public class Inventario {
     @Override
     public int hashCode() {
         return Objects.hash(id, itens);
-    }
-
-    @Override
-    public String toString() {
-        return "Inventario{" +
-                "id='" + id + '\'' +
-                ", itens=" + itens +
-                '}';
     }
 }
