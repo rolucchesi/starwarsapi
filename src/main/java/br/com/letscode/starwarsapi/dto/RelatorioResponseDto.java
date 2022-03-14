@@ -15,10 +15,10 @@ public class RelatorioResponseDto {
     private Integer pontosPerdidosTraidores;
 
     @JsonCreator
-    public RelatorioResponseDto(@JsonProperty("porcentagemTraidores") Double porcentagemTraidores,
-                                @JsonProperty("porcentagemRebeldes") Double porcentagemRebeldes,
-                                @JsonProperty("quantidadeMediaRecursos") QuantidadeMediaRecursosDto quantidadeMediaRecursos,
-                                @JsonProperty("pontosPerdidosTraidores") Integer pontosPerdidosTraidores) {
+    public RelatorioResponseDto(@JsonProperty("porcentagemTraidores") final Double porcentagemTraidores,
+                                @JsonProperty("porcentagemRebeldes") final Double porcentagemRebeldes,
+                                @JsonProperty("quantidadeMediaRecursos") final QuantidadeMediaRecursosDto quantidadeMediaRecursos,
+                                @JsonProperty("pontosPerdidosTraidores") final Integer pontosPerdidosTraidores) {
         this.porcentagemTraidores = porcentagemTraidores;
         this.porcentagemRebeldes = porcentagemRebeldes;
         this.quantidadeMediaRecursos = quantidadeMediaRecursos;
@@ -34,10 +34,10 @@ public class RelatorioResponseDto {
         private Double mediaComidas;
 
         @JsonCreator
-        public QuantidadeMediaRecursosDto(@JsonProperty("mediaArmas") Double mediaArmas,
-                                          @JsonProperty("mediaMunições") Double mediaMunicoes,
-                                          @JsonProperty("mediaÁguas") Double mediaAguas,
-                                          @JsonProperty("mediaComidas") Double mediaComidas) {
+        public QuantidadeMediaRecursosDto(@JsonProperty("mediaArmas") final Double mediaArmas,
+                                          @JsonProperty("mediaMunicoes") final Double mediaMunicoes,
+                                          @JsonProperty("mediaAguas") final Double mediaAguas,
+                                          @JsonProperty("mediaComidas") final Double mediaComidas) {
             this.mediaArmas = mediaArmas;
             this.mediaMunicoes = mediaMunicoes;
             this.mediaAguas = mediaAguas;

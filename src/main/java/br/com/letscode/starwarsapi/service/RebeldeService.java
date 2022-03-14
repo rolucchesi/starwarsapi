@@ -1,6 +1,7 @@
 package br.com.letscode.starwarsapi.service;
 
 import br.com.letscode.starwarsapi.dto.CadastrarRebeldeDTO;
+import br.com.letscode.starwarsapi.dto.LocalizacaoRequestDto;
 import br.com.letscode.starwarsapi.dto.NegociarItensRequestDto;
 import br.com.letscode.starwarsapi.model.Inventario;
 import br.com.letscode.starwarsapi.model.Item;
@@ -19,10 +20,10 @@ public class RebeldeService {
     @Autowired
     private RebeldesRepository rebeldesRepository;
 
-    public Rebelde criarRebelde(CadastrarRebeldeDTO cadastrarRebeldeDTO) {
+    public Rebelde criarRebelde(final CadastrarRebeldeDTO cadastrarRebeldeDTO) {
         validarDadosDto(cadastrarRebeldeDTO);
 
-        Rebelde rebelde = criarEntidadeDoDto(cadastrarRebeldeDTO);
+        final Rebelde rebelde = criarEntidadeDoDto(cadastrarRebeldeDTO);
         rebeldesRepository.save(rebelde);
 
         return rebelde;
@@ -32,27 +33,37 @@ public class RebeldeService {
         return rebeldesRepository.findAll();
     }
 
-    public void editarLocalizacao(String id) {
-        Rebelde rebeldeEditar = rebeldesRepository.getById(id);
-        final Localizacao localizacaoNova = new Localizacao("456", "789", "Lua");
-        rebeldeEditar.setLocalizacao(localizacaoNova);
-        rebeldesRepository.save(rebeldeEditar);
+    public Rebelde editarLocalizacao(final String id, final LocalizacaoRequestDto localizacaoRequestDto) {
+        final Rebelde rebelde = rebeldesRepository.findById(id).orElseThrow(() -> {
+            throw new RuntimeException("Não existe rebelde com este id: " + id);
+        });
+
+        final Localizacao localizacaoNova = new Localizacao(
+                localizacaoRequestDto.getLatitude(),
+                localizacaoRequestDto.getLongitude(),
+                localizacaoRequestDto.getNome());
+
+        rebelde.setLocalizacao(localizacaoNova);
+
+        rebeldesRepository.save(rebelde);
+
+        return rebelde;
     }
 
-    public void negociarItens(NegociarItensRequestDto negociarItensRequestDto) {
-        Rebelde rebelde1 = rebeldesRepository.findById(negociarItensRequestDto.getRebelde1().getId()).orElseThrow(() -> {
+    public void negociarItens(final NegociarItensRequestDto negociarItensRequestDto) {
+        final Rebelde rebelde1 = rebeldesRepository.findById(negociarItensRequestDto.getRebelde1().getId()).orElseThrow(() -> {
             throw new RuntimeException("Não existe rebelde com este id: " + negociarItensRequestDto.getRebelde1().getId());
         });
 
-        Rebelde rebelde2 = rebeldesRepository.findById(negociarItensRequestDto.getRebelde2().getId()).orElseThrow(() -> {
+        final Rebelde rebelde2 = rebeldesRepository.findById(negociarItensRequestDto.getRebelde2().getId()).orElseThrow(() -> {
             throw new RuntimeException("Não existe rebelde com este id: " + negociarItensRequestDto.getRebelde2().getId());
         });
 
         checarRebeldeTraidor(rebelde1);
         checarRebeldeTraidor(rebelde2);
 
-        List<Item> itensTrocaRebelde1 = negociarItensRequestDto.getRebelde1().getItens();
-        List<Item> itensTrocaRebelde2 = negociarItensRequestDto.getRebelde2().getItens();
+        final List<Item> itensTrocaRebelde1 = negociarItensRequestDto.getRebelde1().getItens();
+        final List<Item> itensTrocaRebelde2 = negociarItensRequestDto.getRebelde2().getItens();
 
         checarSeRebeldePossuiItensParaNegocio(rebelde1, itensTrocaRebelde1);
         checarSeRebeldePossuiItensParaNegocio(rebelde2, itensTrocaRebelde2);
@@ -63,15 +74,15 @@ public class RebeldeService {
         atualizarInventario(rebelde2, itensTrocaRebelde2, itensTrocaRebelde1);
     }
 
-    private void checarRebeldeTraidor(Rebelde rebelde) {
-        if(rebelde.getTraidor()) {
+    private void checarRebeldeTraidor(final Rebelde rebelde) {
+        if(rebelde.getTraidor().equals(Boolean.TRUE)) {
             throw new RuntimeException("Não é possível fazer negociação com rebeldes traidores");
         }
     }
 
-    private void checarSeRebeldePossuiItensParaNegocio(Rebelde rebelde, List<Item> listaTroca) {
-        List<Item> listaItensRebelde = rebelde.getInventario().getItens();
-        Integer quantidadeDeItensParaTroca = listaTroca.size();
+    private void checarSeRebeldePossuiItensParaNegocio(final Rebelde rebelde, final List<Item> listaTroca) {
+        final List<Item> listaItensRebelde = rebelde.getInventario().getItens();
+        final Integer quantidadeDeItensParaTroca = listaTroca.size();
         final Integer[] validador = {0};
 
         listaTroca.forEach(item -> {
@@ -91,7 +102,7 @@ public class RebeldeService {
         }
     }
 
-    private void checarQuantidadeDePontosTroca(List<Item> itensTrocaRebelde1, List<Item> itensTrocaRebelde2) {
+    private void checarQuantidadeDePontosTroca(final List<Item> itensTrocaRebelde1, final List<Item> itensTrocaRebelde2) {
         final Integer[] pontosTrocaRebelde1 = {0};
         final Integer[] pontosTrocaRebelde2 = {0};
 
@@ -103,8 +114,8 @@ public class RebeldeService {
         }
     }
 
-    private void atualizarInventario(Rebelde rebelde, List<Item> itensTrocaRebeldeRetirar, List<Item> itensTrocaRebeldeAdicionar) {
-        List<Item> listaItensRebelde = rebelde.getInventario().getItens();
+    private void atualizarInventario(final Rebelde rebelde, final List<Item> itensTrocaRebeldeRetirar, final List<Item> itensTrocaRebeldeAdicionar) {
+        final List<Item> listaItensRebelde = rebelde.getInventario().getItens();
 
         itensTrocaRebeldeRetirar.forEach(item -> {
             listaItensRebelde.forEach(itemRebelde -> {
@@ -115,7 +126,7 @@ public class RebeldeService {
         });
 
         itensTrocaRebeldeAdicionar.forEach(item -> {
-            boolean[] possuiItem = {false};
+            final boolean[] possuiItem = {false};
 
             listaItensRebelde.forEach(itemRebelde -> {
                 if (itemRebelde.getNome().equals(item.getNome())) {
@@ -130,7 +141,7 @@ public class RebeldeService {
                     }
                 });
             } else {
-                Item itemAdicionar = new Item(item.getNome(), item.getQuantidade());
+                final Item itemAdicionar = new Item(item.getNome(), item.getQuantidade());
                 listaItensRebelde.add(itemAdicionar);
             }
         });
@@ -140,22 +151,22 @@ public class RebeldeService {
         rebeldesRepository.save(rebelde);
     }
 
-    private Rebelde criarEntidadeDoDto(CadastrarRebeldeDTO cadastrarRebeldeDTO) {
-        Localizacao localizacao = new Localizacao(
+    private Rebelde criarEntidadeDoDto(final CadastrarRebeldeDTO cadastrarRebeldeDTO) {
+        final Localizacao localizacao = new Localizacao(
                 cadastrarRebeldeDTO.getLocalizacao().getLatitude(),
                 cadastrarRebeldeDTO.getLocalizacao().getLongitude(),
                 cadastrarRebeldeDTO.getLocalizacao().getNome());
 
-        List<Item> itens = new ArrayList<>();
+        final List<Item> itens = new ArrayList<>();
 
         cadastrarRebeldeDTO.getInventario().getItens().forEach(item -> {
-            Item item1 = new Item(item.getNome(), item.getQuantidade());
+            final Item item1 = new Item(item.getNome(), item.getQuantidade());
             itens.add(item1);
         });
 
-        Inventario inventario = new Inventario(itens);
+        final Inventario inventario = new Inventario(itens);
 
-        Rebelde rebelde = new Rebelde(cadastrarRebeldeDTO.getNome(),
+        final Rebelde rebelde = new Rebelde(cadastrarRebeldeDTO.getNome(),
                 cadastrarRebeldeDTO.getIdade(),
                 cadastrarRebeldeDTO.getGenero(),
                 0,
@@ -166,7 +177,7 @@ public class RebeldeService {
         return rebelde;
     }
 
-    private void validarDadosDto(CadastrarRebeldeDTO cadastrarRebeldeDTO) {
+    private void validarDadosDto(final CadastrarRebeldeDTO cadastrarRebeldeDTO) {
         if (cadastrarRebeldeDTO.getNome().trim().isBlank()) {
             throw new RuntimeException("Não é possível criar um rebelde sem nome");
         }
@@ -184,7 +195,19 @@ public class RebeldeService {
         if (cadastrarRebeldeDTO.getInventario().getItens().isEmpty()) {
             throw new RuntimeException("Não é possível criar um rebelde com inventário vazio");
         }
-
     }
 
+    public void acusarTraidor(final String id) {
+        final Rebelde rebelde = rebeldesRepository.findById(id).orElseThrow(() -> {
+            throw new RuntimeException("Não existe rebelde com este id: " + id);
+        });
+
+        rebelde.setContagemTraidor(rebelde.getContagemTraidor() + 1);
+
+        if(rebelde.getContagemTraidor() >= 3) {
+            rebelde.setTraidor(Boolean.TRUE);
+        }
+
+        rebeldesRepository.save(rebelde);
+    }
 }

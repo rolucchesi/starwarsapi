@@ -1,0 +1,13 @@
+{
+  "nome": "Joao",
+  "idade": 35,
+  "genero": "Masculino",
+  "localizacao": {
+    "latitude": "123",
+    "longitude": "456",
+    "nome": "galaxia"
+  },
+  "inventario": {
+    "itens": []
+  }
+}

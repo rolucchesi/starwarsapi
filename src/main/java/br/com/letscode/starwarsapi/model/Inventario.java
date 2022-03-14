@@ -35,6 +35,18 @@ public class Inventario {
         this.itens = itens;
     }
 
+    public Integer getQuantidadeItemEspecifico(final String nome) {
+        final Integer[] quantidade = {0};
+
+        this.itens.forEach(item -> {
+            if(item.getNome().equals(nome)) {
+                quantidade[0] = item.getQuantidade();
+            }
+        });
+
+        return quantidade[0];
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
