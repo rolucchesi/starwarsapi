@@ -22,7 +22,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,14 +103,14 @@ public class RebeldeControllerTest {
         mockMvc.perform(get("/v1/rebeldes"))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("[0].nome", equalTo("João")))
-                .andExpect(jsonPath("[1].nome", equalTo("Maria")))
+                .andExpect(jsonPath("$[0].nome", equalTo("João")))
+                .andExpect(jsonPath("$[1].nome", equalTo("Maria")))
                 .andReturn();
     }
 
     @Test
     @DisplayName("Deve atualizar localização do rebelde")
-    void deveAtualizarLocalizaçãoDoRebelde() throws Exception {
+    void deveAtualizarLocalizacaoDoRebelde() throws Exception {
         final Rebelde rebelde1 = TestUtils.criarRebelde1();
         rebeldesRepository.save(rebelde1);
 
@@ -120,6 +123,21 @@ public class RebeldeControllerTest {
                 .andExpect(jsonPath("$.localizacao.latitude", equalTo("1234")))
                 .andExpect(jsonPath("$.localizacao.longitude", equalTo("5678")))
                 .andExpect(jsonPath("$.localizacao.nome", equalTo("Lua")));
+    }
+
+    @Test
+    @DisplayName("Deve conseguir acusar rebelde de traidor")
+    void deveConseguirAcusarRebeldeDeTraidor() throws Exception {
+        final Rebelde rebelde1 = TestUtils.criarRebelde1();
+        rebeldesRepository.save(rebelde1);
+
+        mockMvc.perform(patch("/v1/rebeldes/acusar/1"))
+                .andExpect(status().is(200));
+
+        Rebelde rebeldeAtualizado = rebeldesRepository.findById("1").get();
+
+        assertThat(rebeldeAtualizado.getContagemTraidor()).isEqualTo(3);
+        assertThat(rebeldeAtualizado.getTraidor()).isEqualTo(Boolean.TRUE);
     }
 
     @Test

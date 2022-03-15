@@ -50,6 +50,20 @@ public class RebeldeService {
         return rebelde;
     }
 
+    public void acusarTraidor(final String id) {
+        final Rebelde rebelde = rebeldesRepository.findById(id).orElseThrow(() -> {
+            throw new RuntimeException("Não existe rebelde com este id: " + id);
+        });
+
+        rebelde.setContagemTraidor(rebelde.getContagemTraidor() + 1);
+
+        if(rebelde.getContagemTraidor() >= 3) {
+            rebelde.setTraidor(Boolean.TRUE);
+        }
+
+        rebeldesRepository.save(rebelde);
+    }
+
     public void negociarItens(final NegociarItensRequestDto negociarItensRequestDto) {
         final Rebelde rebelde1 = rebeldesRepository.findById(negociarItensRequestDto.getRebelde1().getId()).orElseThrow(() -> {
             throw new RuntimeException("Não existe rebelde com este id: " + negociarItensRequestDto.getRebelde1().getId());
@@ -195,19 +209,5 @@ public class RebeldeService {
         if (cadastrarRebeldeDTO.getInventario().getItens().isEmpty()) {
             throw new RuntimeException("Não é possível criar um rebelde com inventário vazio");
         }
-    }
-
-    public void acusarTraidor(final String id) {
-        final Rebelde rebelde = rebeldesRepository.findById(id).orElseThrow(() -> {
-            throw new RuntimeException("Não existe rebelde com este id: " + id);
-        });
-
-        rebelde.setContagemTraidor(rebelde.getContagemTraidor() + 1);
-
-        if(rebelde.getContagemTraidor() >= 3) {
-            rebelde.setTraidor(Boolean.TRUE);
-        }
-
-        rebeldesRepository.save(rebelde);
     }
 }

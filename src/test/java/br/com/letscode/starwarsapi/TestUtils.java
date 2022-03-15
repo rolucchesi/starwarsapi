@@ -24,7 +24,7 @@ public class TestUtils {
         final Rebelde rebelde = new Rebelde("João",
                 33,
                 "Masculino",
-                0,
+                2,
                 false,
                 localizacao,
                 inventarioRebelde);
