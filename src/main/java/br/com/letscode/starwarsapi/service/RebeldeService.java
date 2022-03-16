@@ -1,6 +1,7 @@
 package br.com.letscode.starwarsapi.service;
 
 import br.com.letscode.starwarsapi.dto.CadastrarRebeldeDTO;
+import br.com.letscode.starwarsapi.dto.ItemRequestDto;
 import br.com.letscode.starwarsapi.dto.LocalizacaoRequestDto;
 import br.com.letscode.starwarsapi.dto.NegociarItensRequestDto;
 import br.com.letscode.starwarsapi.model.Inventario;
@@ -11,7 +12,6 @@ import br.com.letscode.starwarsapi.repository.RebeldesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,8 +76,13 @@ public class RebeldeService {
         checarRebeldeTraidor(rebelde1);
         checarRebeldeTraidor(rebelde2);
 
-        final List<Item> itensTrocaRebelde1 = negociarItensRequestDto.getRebelde1().getItens();
-        final List<Item> itensTrocaRebelde2 = negociarItensRequestDto.getRebelde2().getItens();
+        final List<ItemRequestDto> itensDtoTrocaRebelde1 = negociarItensRequestDto.getRebelde1().getItens();
+        final List<ItemRequestDto> itensDtoTrocaRebelde2 = negociarItensRequestDto.getRebelde2().getItens();
+
+        final List<Item> itensTrocaRebelde1 = negociarItensRequestDto.getRebelde1()
+                .converterItemRequestDtoParaItem(itensDtoTrocaRebelde1);
+        final List<Item> itensTrocaRebelde2 = negociarItensRequestDto.getRebelde2()
+                .converterItemRequestDtoParaItem(itensDtoTrocaRebelde2);
 
         checarSeRebeldePossuiItensParaNegocio(rebelde1, itensTrocaRebelde1);
         checarSeRebeldePossuiItensParaNegocio(rebelde2, itensTrocaRebelde2);
@@ -169,15 +174,13 @@ public class RebeldeService {
         final Localizacao localizacao = new Localizacao(cadastrarRebeldeDTO.getLocalizacao());
         final Inventario inventario = new Inventario(cadastrarRebeldeDTO.getInventario());
 
-        final Rebelde rebelde = new Rebelde(cadastrarRebeldeDTO.getNome(),
+        return new Rebelde(cadastrarRebeldeDTO.getNome(),
                 cadastrarRebeldeDTO.getIdade(),
                 cadastrarRebeldeDTO.getGenero(),
                 0,
                 false,
                 localizacao,
                 inventario);
-
-        return rebelde;
     }
 
     private void validarDadosDto(final CadastrarRebeldeDTO cadastrarRebeldeDTO) {

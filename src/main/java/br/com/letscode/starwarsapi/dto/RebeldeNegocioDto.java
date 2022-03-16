@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -17,12 +18,19 @@ import java.util.List;
 public class RebeldeNegocioDto {
 
     private String id;
-    private List<Item> itens;
+    private List<ItemRequestDto> itens;
 
     @JsonCreator
-    public RebeldeNegocioDto(@JsonProperty("id") String id,
-                             @JsonProperty("itens") List<Item> itens) {
+    public RebeldeNegocioDto(@JsonProperty("id") final String id,
+                             @JsonProperty("itens") final List<ItemRequestDto> itens) {
         this.id = id;
         this.itens = itens;
+    }
+
+    public List<Item> converterItemRequestDtoParaItem(final List<ItemRequestDto> itemRequestDtoList) {
+        return itemRequestDtoList
+                .stream()
+                .map(itemDto -> new Item(itemDto.getNome(), itemDto.getQuantidade()))
+                .collect(Collectors.toList());
     }
 }
