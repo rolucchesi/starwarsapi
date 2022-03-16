@@ -1,0 +1,20 @@
+{
+  "rebelde1": {
+    "id": "1",
+    "itens": [
+      {
+        "nome": "Água",
+        "quantidade": 3
+      }
+    ]
+  },
+  "rebelde2": {
+    "id": "2",
+    "itens": [
+      {
+        "nome": "Comida",
+        "quantidade": 6
+      }
+    ]
+  }
+}
