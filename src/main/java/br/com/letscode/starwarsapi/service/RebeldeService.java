@@ -166,19 +166,8 @@ public class RebeldeService {
     }
 
     private Rebelde criarEntidadeDoDto(final CadastrarRebeldeDTO cadastrarRebeldeDTO) {
-        final Localizacao localizacao = new Localizacao(
-                cadastrarRebeldeDTO.getLocalizacao().getLatitude(),
-                cadastrarRebeldeDTO.getLocalizacao().getLongitude(),
-                cadastrarRebeldeDTO.getLocalizacao().getNome());
-
-        final List<Item> itens = new ArrayList<>();
-
-        cadastrarRebeldeDTO.getInventario().getItens().forEach(item -> {
-            final Item item1 = new Item(item.getNome(), item.getQuantidade());
-            itens.add(item1);
-        });
-
-        final Inventario inventario = new Inventario(itens);
+        final Localizacao localizacao = new Localizacao(cadastrarRebeldeDTO.getLocalizacao());
+        final Inventario inventario = new Inventario(cadastrarRebeldeDTO.getInventario());
 
         final Rebelde rebelde = new Rebelde(cadastrarRebeldeDTO.getNome(),
                 cadastrarRebeldeDTO.getIdade(),

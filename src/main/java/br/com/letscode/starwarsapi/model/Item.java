@@ -1,5 +1,6 @@
 package br.com.letscode.starwarsapi.model;
 
+import br.com.letscode.starwarsapi.dto.ItemRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,6 +39,13 @@ public class Item {
         this.nome = validaNomeItem(nome);
         this.quantidade = quantidade;
         this.pontos = getQuantidadePontos(this.nome);
+    }
+
+    public Item(ItemRequestDto itemDTO) {
+        this.id = UUID.randomUUID().toString();
+        this.nome = validaNomeItem(itemDTO.getNome());
+        this.quantidade = itemDTO.getQuantidade();
+        this.pontos = getQuantidadePontos(itemDTO.getNome());
     }
 
     private String validaNomeItem(final String nome) {

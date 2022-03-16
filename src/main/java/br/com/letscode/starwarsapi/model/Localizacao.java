@@ -1,5 +1,6 @@
 package br.com.letscode.starwarsapi.model;
 
+import br.com.letscode.starwarsapi.dto.LocalizacaoRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,6 +41,13 @@ public class Localizacao {
         this.latitude = latitude;
         this.longitude = longitude;
         this.nome = nome;
+    }
+
+    public Localizacao(LocalizacaoRequestDto localizacaoDTO) {
+        this.id = UUID.randomUUID().toString();
+        this.latitude = localizacaoDTO.getLatitude();
+        this.longitude = localizacaoDTO.getLongitude();
+        this.nome = localizacaoDTO.getNome();
     }
 
     @Override

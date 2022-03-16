@@ -1,5 +1,7 @@
 package br.com.letscode.starwarsapi.model;
 
+import br.com.letscode.starwarsapi.dto.InventarioRequestDto;
+import br.com.letscode.starwarsapi.dto.ItemRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "INVENTARIO")
@@ -32,6 +35,13 @@ public class Inventario {
 
     public Inventario(final List<Item> itens) {
         this.id = UUID.randomUUID().toString();
+        this.itens = itens;
+    }
+
+    public Inventario(final InventarioRequestDto inventarioDTO) {
+        this.id = UUID.randomUUID().toString();
+        List<ItemRequestDto> itensDTO = inventarioDTO.getItens();
+        List<Item> itens = itensDTO.stream().map(itemDTO -> new Item(itemDTO)).collect(Collectors.toList());
         this.itens = itens;
     }
 
